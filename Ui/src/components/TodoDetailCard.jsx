@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteDialogBox from "./DeleteDialogBox";
 
 const TodoDetailCard = (props) => {
   console.log(props);
@@ -63,12 +62,11 @@ const TodoDetailCard = (props) => {
                 variant="contained"
                 startIcon={<EditIcon />}
                 onClick={() => {
-                  navigate("/editTodo");
+                  navigate(`/edit/todo/${props._id}`);
                 }}
               >
                 <Typography variant="subtitile1">Edit</Typography>
               </Button>
-              <DeleteDialogBox />
             </TableRow>
           </TableBody>
         </Table>

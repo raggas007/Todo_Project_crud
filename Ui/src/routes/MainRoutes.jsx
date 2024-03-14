@@ -13,7 +13,7 @@ const MainRoutes = [
         element: <Home />,
       },
       {
-        path: "editTodo",
+        path: "/edit/todo/:id",
         element: <EditTodo />,
       },
     ],

@@ -46,6 +46,7 @@ router.delete(
   "/delete/todo/:id",
   isUser,
   checkMongoIdvalidity,
+
   async (req, res) => {
     //extract todo id from req.params
     const todoId = req.params.id;
@@ -92,6 +93,26 @@ router.put(
     return res
       .status(200)
       .send({ message: "the todo is updated successfully." });
+  }
+);
+router.get(
+  "/todo/details/:id",
+  isUser,
+  checkMongoIdvalidity,
+  async (req, res) => {
+    //extract todoId from req.params
+    const todoId = req.params.id;
+    //find Todo
+    const todo = await Todo.findOne({ _id: todoId });
+
+    //if not todo throw error
+
+    if (!todo) {
+      return res.status(404).send({ message: "no todo is found" });
+    }
+
+    //send appropriate response
+    return res.status(200).send({ message: "success", todoDetails: todo });
   }
 );
 export default router;

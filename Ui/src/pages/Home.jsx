@@ -10,36 +10,54 @@ import {
 } from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { addTodo } from "../lib/apis";
 import $axios from "../lib/axios.instance";
 import TodoDetailCard from "../components/TodoDetailCard";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 const Home = () => {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const { isError, error, data } = useQuery({
+  const {
+    isLoading: getTodoLoading,
+    isError,
+    error,
+    data,
+  } = useQuery({
     queryKey: ["get-details"],
     queryFn: async (values) => {
-      return await $axios.get("/todo/details", values);
+      return await $axios.get(`/todo/details`, values);
     },
   });
   const todoDetails = data?.data?.todoDetails;
-  console.log(todoDetails);
 
-  const { isLoading, mutate } = useMutation({
+  const { isLoading: addTodoLoading, mutate: addTodoMutate } = useMutation({
     mutationKey: ["add-todo"],
     mutationFn: addTodo,
     onSuccess: (response) => {
-      navigate("/home");
+      queryClient.invalidateQueries("get-details");
     },
     onError: (error) => {
       console.log(error?.response?.data?.message);
     },
   });
-  if (isLoading) {
+  const { isLoading: deleteTodoLoading, mutate: deleteTodoMutate } =
+    useMutation({
+      mutationKey: ["delete-todo"],
+      mutationFn: async (_id) => {
+        return await $axios.delete(`/delete/todo/${_id}`);
+      },
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("get-details");
+      },
+      onError: (error) => {
+        console.log(error?.response?.data?.message);
+      },
+    });
+  if (addTodoLoading || getTodoLoading || deleteTodoLoading) {
     return <CircularProgress />;
   }
   return (
@@ -61,7 +79,7 @@ const Home = () => {
               .max(40, "description must be at max 40 character."),
           })}
           onSubmit={(values) => {
-            mutate(values);
+            addTodoMutate(values);
           }}
         >
           {({ handleSubmit, getFieldProps, errors, touched }) => (
@@ -120,10 +138,33 @@ const Home = () => {
         </Formik>
       </Box>
       <Box sx={{ marginTop: "5rem" }}>
-        {todoDetails &&
-          todoDetails.map((item) => {
-            return <TodoDetailCard key={item._id} {...item} />;
-          })}
+        {todoDetails?.length === 0 ? (
+          <Typography variant="h5" sx={{ color: "red" }}>
+            No Todo records Available Here
+          </Typography>
+        ) : (
+          todoDetails?.map((item) => {
+            return (
+              <Box key={item._id} sx={{ display: "flex" }}>
+                <TodoDetailCard {...item} />
+
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{
+                    height: "40px",
+                  }}
+                  startIcon={<DeleteOutlinedIcon />}
+                  onClick={() => {
+                    deleteTodoMutate(item?._id);
+                  }}
+                >
+                  Delete
+                </Button>
+              </Box>
+            );
+          })
+        )}
       </Box>
     </Box>
   );

@@ -15,7 +15,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LogoutConfirmationDialogBox from "./LogoutConfirmationDialogBox";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -68,10 +67,16 @@ const Header = (props) => {
             }}
             variant="outlined"
             color="secondary"
+            sx={{ marginRight: "1rem" }}
           >
             <Typography variiant="h5"> Home</Typography>
           </Button>
-
+          <Typography
+            variant="h6"
+            sx={{ marginLeft: "1rem", fontWeight: "bold" }}
+          >
+            HI {localStorage.getItem("firstName").toUpperCase()}!
+          </Typography>
           <LogoutConfirmationDialogBox />
         </Toolbar>
       </AppBar>

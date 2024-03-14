@@ -28,15 +28,15 @@ const LogoutConfirmationDialogBox = () => {
 
   return (
     <React.Fragment>
-      
-        <IconButton
-          variant="outlined"
-          onClick={handleClickOpen}
-          sx={{ color: "white" }}
-        >
-          Logout <LogoutIcon />
-        </IconButton>
-     
+      <IconButton
+        variant="outlined"
+        onClick={handleClickOpen}
+        sx={{ color: "Red" }}
+      >
+        Logout
+        <LogoutIcon />
+      </IconButton>
+
       <Dialog
         open={open}
         TransitionComponent={Transition}

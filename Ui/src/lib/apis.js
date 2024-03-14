@@ -10,7 +10,3 @@ export const loginUser = async (values) => {
 export const addTodo = async (values) => {
   return await $axios.post("/add/todo", values);
 };
-
-export const deleteTodo = async (todoId) => {
-  return await $axios.delete(`/delete/todo/${todoId}`);
-};
