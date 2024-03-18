@@ -20,7 +20,7 @@ app.use(userRoutes);
 app.use(todoRoutes);
 
 // app port and server
-const PORT = 7500;
+const PORT = process.env.API_PORT;
 
 app.listen(PORT, () => {
   console.log(`App is listening to the port ${PORT}`);

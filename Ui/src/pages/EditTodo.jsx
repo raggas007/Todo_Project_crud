@@ -60,6 +60,7 @@ const EditTodo = () => {
           initialValues={{
             courseName: todoDetails?.courseName || "",
             studentName: todoDetails?.studentName || "",
+            contactNumber: todoDetails?.contactNumber || "",
           }}
           validationSchema={Yup.object({
             courseName: Yup.string()
@@ -67,9 +68,10 @@ const EditTodo = () => {
               .trim()
               .max(40, "course name must be at max 40 character"),
             studentName: Yup.string()
-              .required("description is required")
+              .required("Student Name is required")
               .trim()
-              .max(40, "description must be at max 40 character."),
+              .max(40, "Student Name must be at max 40 character."),
+            contactNumber: Yup.number().required("contact number is required"),
           })}
           onSubmit={(values) => {
             mutate(values);
@@ -112,6 +114,16 @@ const EditTodo = () => {
                 />
                 {touched.studentName && errors.studentName ? (
                   <FormHelperText error>{errors.studentName}</FormHelperText>
+                ) : null}
+              </FormControl>
+              <FormControl>
+                <TextField
+                  label="Contact Number"
+                  type="number"
+                  {...getFieldProps("contactNumber")}
+                />
+                {touched.contactNumber && errors.contactNumber ? (
+                  <FormHelperText error>{errors.contactNumber}</FormHelperText>
                 ) : null}
               </FormControl>
               <Button

@@ -45,6 +45,7 @@ const Login = () => {
   if (isLoading) {
     return <CircularProgress color="success" />;
   }
+
   return (
     <Box
       sx={{

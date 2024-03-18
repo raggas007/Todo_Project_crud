@@ -17,9 +17,11 @@ import { addTodo } from "../lib/apis";
 import $axios from "../lib/axios.instance";
 import TodoDetailCard from "../components/TodoDetailCard";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Home = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     isLoading: getTodoLoading,
@@ -67,6 +69,7 @@ const Home = () => {
           initialValues={{
             courseName: "",
             studentName: "",
+            contactNumber: "",
           }}
           validationSchema={Yup.object({
             courseName: Yup.string()
@@ -77,6 +80,7 @@ const Home = () => {
               .required("description is required")
               .trim()
               .max(40, "description must be at max 40 character."),
+            contactNumber: Yup.number().required("contact number is required"),
           })}
           onSubmit={(values) => {
             addTodoMutate(values);
@@ -87,7 +91,7 @@ const Home = () => {
               onSubmit={handleSubmit}
               style={{
                 minHeight: "50px",
-                width: "800px",
+                width: "1100px",
                 display: "flex",
                 padding: "2rem",
                 borderRadius: "3rem",
@@ -105,6 +109,7 @@ const Home = () => {
               </Typography>
               <FormControl>
                 <TextField
+                  required
                   label="Course Name"
                   {...getFieldProps("courseName")}
                 />
@@ -114,11 +119,22 @@ const Home = () => {
               </FormControl>
               <FormControl>
                 <TextField
+                  required
                   label="Student Name"
                   {...getFieldProps("studentName")}
                 />
                 {touched.studentName && errors.studentName ? (
                   <FormHelperText error>{errors.studentName}</FormHelperText>
+                ) : null}
+              </FormControl>
+              <FormControl>
+                <TextField
+                  label="Contact Number"
+                  type="number"
+                  {...getFieldProps("contactNumber")}
+                />
+                {touched.contactNumber && errors.contactNumber ? (
+                  <FormHelperText error>{errors.contactNumber}</FormHelperText>
                 ) : null}
               </FormControl>
               <Button
@@ -145,22 +161,48 @@ const Home = () => {
         ) : (
           todoDetails?.map((item) => {
             return (
-              <Box key={item._id} sx={{ display: "flex" }}>
-                <TodoDetailCard {...item} />
-
-                <Button
-                  variant="contained"
-                  color="error"
+              <Box sx={{ display: "flex" }}>
+                <Box
+                  key={item?._id}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  <TodoDetailCard {...item} />
+                </Box>
+                <Stack
+                  direction="column"
+                  spacing={0.5}
                   sx={{
-                    height: "40px",
-                  }}
-                  startIcon={<DeleteOutlinedIcon />}
-                  onClick={() => {
-                    deleteTodoMutate(item?._id);
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "-4rem",
                   }}
                 >
-                  Delete
-                </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<EditIcon />}
+                    sx={{
+                      height: "40px",
+                    }}
+                    onClick={() => {
+                      navigate(`/edit/todo/${item?._id}`);
+                    }}
+                  >
+                    <Typography variant="subtitile1">Edit</Typography>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{
+                      height: "40px",
+                    }}
+                    startIcon={<DeleteOutlinedIcon />}
+                    onClick={() => {
+                      deleteTodoMutate(item?._id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Stack>
               </Box>
             );
           })

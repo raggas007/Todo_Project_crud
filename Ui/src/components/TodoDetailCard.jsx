@@ -1,5 +1,5 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import {
   Box,
@@ -13,7 +13,6 @@ import {
   TableRow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
 
 const TodoDetailCard = (props) => {
   console.log(props);
@@ -48,6 +47,11 @@ const TodoDetailCard = (props) => {
                   Student Name
                 </Typography>
               </TableCell>
+              <TableCell align="center">
+                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                  contact Number
+                </Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -58,15 +62,9 @@ const TodoDetailCard = (props) => {
               <TableCell align="center">
                 <Typography variant="h6">{props.studentName}</Typography>
               </TableCell>
-              <Button
-                variant="contained"
-                startIcon={<EditIcon />}
-                onClick={() => {
-                  navigate(`/edit/todo/${props._id}`);
-                }}
-              >
-                <Typography variant="subtitile1">Edit</Typography>
-              </Button>
+              <TableCell align="center">
+                <Typography variant="h6">{props.contactNumber}</Typography>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

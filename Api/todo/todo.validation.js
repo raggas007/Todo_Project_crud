@@ -9,4 +9,5 @@ export let todoValidationSchema = Yup.object({
     .required("student name is required")
     .trim()
     .max(40, "student name must be at max 100 character."),
+  contactNumber: Yup.number().required("contact number is required"),
 });

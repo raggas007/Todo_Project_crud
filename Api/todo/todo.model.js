@@ -14,6 +14,12 @@ const todoSchema = new mongoose.Schema(
       trim: true,
       maxLength: 40,
     },
+    contactNumber: {
+      type: Number,
+      required: false,
+      default: null,
+      unique: true,
+    },
   },
   {
     timestamps: true,
